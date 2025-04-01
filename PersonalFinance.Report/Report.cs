@@ -1,6 +1,6 @@
 ﻿namespace PersonalFinance.Report
 {
-    public class Class1
+    public class Report
     {
 
     }
