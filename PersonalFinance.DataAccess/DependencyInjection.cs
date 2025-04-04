@@ -1,13 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PersonalFinance.DataAccess.Contexts;
 
-namespace PersonalFinance.Business
+namespace PersonalFinance.DataAccess
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddBusinessServices(this IServiceCollection services)
+        public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<PersonalFinanceContext>(options =>
+                options.UseSqlServer(defaultConnectionString));
+
             return services;
         }
     }

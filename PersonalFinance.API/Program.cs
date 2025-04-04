@@ -1,9 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using PersonalFinance.Business;
+using PersonalFinance.DataAccess;
 using PersonalFinance.DataAccess.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddBusiness();
+builder.Services.AddDataAccess(builder.Configuration);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
