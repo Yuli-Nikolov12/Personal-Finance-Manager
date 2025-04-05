@@ -23,4 +23,4 @@ The solution consists of the following projects:
 
 - **Frontend**: HTML, CSS, JavaScript (React or Vue.js, if applicable) (In Progress)
 - **Backend**: ASP.NET Core Web API 
-- **Database**: MS SQL Server / MongoDB 
+- **Database**: MS SQL Server 
