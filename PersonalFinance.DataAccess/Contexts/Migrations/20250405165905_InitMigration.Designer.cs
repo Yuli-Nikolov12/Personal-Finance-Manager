@@ -12,8 +12,8 @@ using PersonalFinance.DataAccess.Contexts;
 namespace PersonalFinance.DataAccess.Contexts.Migrations
 {
     [DbContext(typeof(PersonalFinanceContext))]
-    [Migration("20250404202627_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20250405165905_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,7 +132,10 @@ namespace PersonalFinance.DataAccess.Contexts.Migrations
             modelBuilder.Entity("PersonalFinance.Business.Entities.Transaction", b =>
                 {
                     b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(18, 2)
@@ -160,9 +163,6 @@ namespace PersonalFinance.DataAccess.Contexts.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CurrencyId");
-
-                    b.HasIndex("TransactionDate")
-                        .HasDatabaseName("IX_TransactionDate");
 
                     b.ToTable("Transactions");
                 });
@@ -192,12 +192,6 @@ namespace PersonalFinance.DataAccess.Contexts.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("PersonalFinance.Business.Entities.Report", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
 
                     b.Navigation("Currency");
@@ -207,11 +201,6 @@ namespace PersonalFinance.DataAccess.Contexts.Migrations
                 {
                     b.Navigation("Budgets");
 
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("PersonalFinance.Business.Entities.Report", b =>
-                {
                     b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618

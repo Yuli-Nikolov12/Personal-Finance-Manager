@@ -55,22 +55,12 @@ namespace PersonalFinance.DataAccess.Contexts
             modelBuilder.Entity<Report>()
                 .HasKey(r => r.ReportId);
 
-            modelBuilder.Entity<Report>()
-                .HasMany(r => r.Transactions)
-                .WithOne() 
-                .HasForeignKey(t => t.TransactionId)
-                .OnDelete(DeleteBehavior.Cascade); 
-
             modelBuilder.Entity<Currency>()
                 .HasKey(c => c.CurrencyId);
 
             modelBuilder.Entity<Currency>()
                 .HasIndex(c => c.CurrencyCode)
                 .IsUnique();
-
-            modelBuilder.Entity<Transaction>()
-                .HasIndex(t => t.TransactionDate)
-                .HasDatabaseName("IX_TransactionDate");
         }
     }
 }

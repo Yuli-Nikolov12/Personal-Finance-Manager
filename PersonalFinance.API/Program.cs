@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalFinance.Business;
-using PersonalFinance.DataAccess;
+using PersonalFinance.Business.Mappings;
 using PersonalFinance.DataAccess.Contexts;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddBusiness();
-builder.Services.AddDataAccess(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
