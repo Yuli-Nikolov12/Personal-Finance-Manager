@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PersonalFinance.API.Repository;
 using PersonalFinance.Business.DTOs;
 using PersonalFinance.Business.Entities;
 using PersonalFinance.DataAccess.Contexts;
-using System.Threading.Tasks;
 
 
 namespace PersonalFinance.API.Controllers
@@ -17,11 +15,10 @@ namespace PersonalFinance.API.Controllers
         private readonly PersonalFinanceContext _context;
         private readonly IMapper _mapper;
 
-        //private Repository<Transaction> _transaction;
+        private Repository<Transaction> _transaction;
         public TransactionsController(PersonalFinanceContext context, IMapper mapper)
         {
-            //_transaction = new Repository<Transaction>(context);
-            _context = context;
+            _transaction = new Repository<Transaction>(context);
             _mapper = mapper;
         }
 
@@ -29,11 +26,7 @@ namespace PersonalFinance.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionDTO>>> GetAllTransactions()
         {
-            //var transactions = await _transaction.GetAllAsync();
-            var transactions = await _context.Transactions
-                .Include(t => t.Category)
-                .Include(t => t.Currency)
-                .ToListAsync();
+            var transactions = await _transaction.GetAllAsync(new QueryOptions<Transaction>() { Includes = "Category,Currency"  });
 
             var transactionDTOs = _mapper.Map<List<TransactionDTO>>(transactions);
 
@@ -44,10 +37,7 @@ namespace PersonalFinance.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionDTO>> GetOneTransaction(int id)
         {
-            var transaction = await _context.Transactions
-                .Include(t => t.Category)
-                .Include(t => t.Currency)
-                .FirstOrDefaultAsync(t => t.TransactionId == id);
+            var transaction = await _transaction.GetByIdAsync(id, new QueryOptions<Transaction>() { Includes = "Category,Currency" });
 
             if (transaction == null) 
             {
@@ -66,8 +56,7 @@ namespace PersonalFinance.API.Controllers
             var transaction = _mapper.Map<Transaction>(transactionDTO);
             if (ModelState.IsValid) 
             {
-                _context.Add(transaction);
-                await _context.SaveChangesAsync();
+                await _transaction.AddAsync(transaction);
                 return CreatedAtAction("Transaction Created",transactionDTO);
             }
             return BadRequest(ModelState);
@@ -75,14 +64,22 @@ namespace PersonalFinance.API.Controllers
 
         // PUT api/<TransactionsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task Update(int id, TransactionDTO transactionDTO)
         {
+            var transaction = _mapper.Map<Transaction>(transactionDTO);
+            transaction.TransactionId = id;
+            if (ModelState.IsValid)
+            {
+                await _transaction.UpdateAsync(transaction);
+                Ok(transactionDTO);
+            }
         }
 
         // DELETE api/<TransactionsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            await _transaction.DeleteAsync(id);
         }
     }
 }
