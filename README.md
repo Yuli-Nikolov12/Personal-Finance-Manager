@@ -21,6 +21,6 @@ The solution consists of the following projects:
 
 ## Technologies Used
 
-- **Frontend**: HTML, CSS, JavaScript (React or Vue.js, if applicable) (In Progress)
+- **Frontend**: HTML, CSS, JavaScript (React.js) (In Progress)
 - **Backend**: ASP.NET Core Web API 
 - **Database**: MS SQL Server 
