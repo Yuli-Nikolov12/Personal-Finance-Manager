@@ -11,7 +11,7 @@ The solution consists of the following projects:
 - **PersonalFinance.DataAccess**: Responsible for interacting with the database. This layer works with EF(Entity Framework) methods for querying and updating data.
 - **PersonalFinance.Report**: This project handles generating financial reports, visualizations, and analytics.
 
-## Features
+## Features (To be implemented...)
 
 - **Expense Tracking**: Track your daily expenses and categorize them.
 - **Income Tracking**: Monitor your sources of income.
