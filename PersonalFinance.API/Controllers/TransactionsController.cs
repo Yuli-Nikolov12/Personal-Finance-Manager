@@ -12,10 +12,9 @@ namespace PersonalFinance.API.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
-        private readonly PersonalFinanceContext _context;
         private readonly IMapper _mapper;
-
         private Repository<Transaction> _transaction;
+
         public TransactionsController(PersonalFinanceContext context, IMapper mapper)
         {
             _transaction = new Repository<Transaction>(context);
