@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PersonalFinance.API.Repository;
 using PersonalFinance.Business.DTOs;
 using PersonalFinance.Business.Entities;
 using PersonalFinance.DataAccess.Contexts;
@@ -15,8 +16,11 @@ namespace PersonalFinance.API.Controllers
     {
         private readonly PersonalFinanceContext _context;
         private readonly IMapper _mapper;
+
+        //private Repository<Transaction> _transaction;
         public TransactionsController(PersonalFinanceContext context, IMapper mapper)
         {
+            //_transaction = new Repository<Transaction>(context);
             _context = context;
             _mapper = mapper;
         }
@@ -25,6 +29,7 @@ namespace PersonalFinance.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionDTO>>> GetAllTransactions()
         {
+            //var transactions = await _transaction.GetAllAsync();
             var transactions = await _context.Transactions
                 .Include(t => t.Category)
                 .Include(t => t.Currency)
