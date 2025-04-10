@@ -30,6 +30,13 @@ namespace PersonalFinance.API.Repository
             }
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            IQueryable<T> query = _dbSet;
+
+            return await query.ToListAsync();
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync(QueryOptions<T> options)
         {
             IQueryable<T> query = _dbSet;
@@ -47,6 +54,16 @@ namespace PersonalFinance.API.Repository
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            IQueryable<T> query = _dbSet;
+
+            var key = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.FirstOrDefault();
+            string primaryKeyName = key?.Name ?? string.Empty;
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, primaryKeyName) == id);
         }
 
         public async Task<T> GetByIdAsync(int id, QueryOptions<T> options)
